@@ -1,12 +1,16 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven' // This should match the name given in the Global Tool Configuration
+    }
+
     stages {
         stage('Build') {
             steps {
                 echo 'Building...'
-                // Use PowerShell to build the project
-                powershell 'mvn clean package'
+                // Use Maven to build the project
+                bat 'mvn clean package'
             }
             post {
                 success {
@@ -17,8 +21,8 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing...'
-                // Run tests using PowerShell
-                powershell 'mvn test'
+                // Run tests using Maven
+                bat 'mvn test'
             }
             post {
                 always {
@@ -30,16 +34,16 @@ pipeline {
             steps {
                 echo 'Deploying...'
                 // Example: Docker deployment using PowerShell
-                powershell 'docker build -t myapp:latest .'
-                powershell 'docker run -d -p 8080:8080 myapp:latest'
+                bat 'docker build -t myapp:latest .'
+                bat 'docker run -d -p 8080:8080 myapp:latest'
             }
         }
         stage('Release') {
             steps {
                 echo 'Releasing...'
                 // Push Docker image to a registry using PowerShell
-                powershell 'docker tag myapp:latest myregistry/myapp:latest'
-                powershell 'docker push myregistry/myapp:latest'
+                bat 'docker tag myapp:latest myregistry/myapp:latest'
+                bat 'docker push myregistry/myapp:latest'
             }
         }
     }
@@ -57,3 +61,4 @@ pipeline {
         }
     }
 }
+
