@@ -5,7 +5,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                // Example: Use Maven to build a Java project
+                // Use Maven to build the project
                 sh 'mvn clean package'
             }
             post {
@@ -22,6 +22,7 @@ pipeline {
             }
             post {
                 always {
+                    // Publish test results
                     junit 'target/surefire-reports/*.xml'
                 }
             }
@@ -29,7 +30,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying...'
-                // Deploy the application (example: Docker container)
+                // Example: Docker deployment
                 sh 'docker build -t myapp:latest .'
                 sh 'docker run -d -p 8080:8080 myapp:latest'
             }
@@ -37,7 +38,7 @@ pipeline {
         stage('Release') {
             steps {
                 echo 'Releasing...'
-                // Push Docker image to a Docker registry
+                // Push Docker image to a registry
                 sh 'docker tag myapp:latest myregistry/myapp:latest'
                 sh 'docker push myregistry/myapp:latest'
             }
