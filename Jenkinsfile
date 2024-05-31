@@ -9,8 +9,9 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                // Use Maven to build the project
-                bat 'mvn clean package'
+                dir('path/to/your/project') {  // Update this path if your pom.xml is in a subdirectory
+                    bat 'mvn clean package'
+                }
             }
             post {
                 success {
@@ -21,8 +22,9 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing...'
-                // Run tests using Maven
-                bat 'mvn test'
+                dir('path/to/your/project') {  // Update this path if your pom.xml is in a subdirectory
+                    bat 'mvn test'
+                }
             }
             post {
                 always {
@@ -33,17 +35,19 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying...'
-                // Example: Docker deployment using PowerShell
-                bat 'docker build -t myapp:latest .'
-                bat 'docker run -d -p 8080:8080 myapp:latest'
+                dir('path/to/your/project') {  // Update this path if your pom.xml is in a subdirectory
+                    bat 'docker build -t myapp:latest .'
+                    bat 'docker run -d -p 8080:8080 myapp:latest'
+                }
             }
         }
         stage('Release') {
             steps {
                 echo 'Releasing...'
-                // Push Docker image to a registry using PowerShell
-                bat 'docker tag myapp:latest myregistry/myapp:latest'
-                bat 'docker push myregistry/myapp:latest'
+                dir('path/to/your/project') {  // Update this path if your pom.xml is in a subdirectory
+                    bat 'docker tag myapp:latest myregistry/myapp:latest'
+                    bat 'docker push myregistry/myapp:latest'
+                }
             }
         }
     }
@@ -61,4 +65,3 @@ pipeline {
         }
     }
 }
-
