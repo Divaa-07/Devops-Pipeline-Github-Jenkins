@@ -17,7 +17,7 @@ pipeline {
                 }
             }
         }
-        stage('Test') {
+       stage('Test') {
             steps {
                 echo 'Running JUnit tests...'
                 sh 'mvn test'
