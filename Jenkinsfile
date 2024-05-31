@@ -5,8 +5,8 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                // Use Maven to build the project
-                sh 'mvn clean package'
+                // Use PowerShell to build the project
+                powershell 'mvn clean package'
             }
             post {
                 success {
@@ -17,12 +17,11 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing...'
-                // Run tests using Maven
-                sh 'mvn test'
+                // Run tests using PowerShell
+                powershell 'mvn test'
             }
             post {
                 always {
-                    // Publish test results
                     junit 'target/surefire-reports/*.xml'
                 }
             }
@@ -30,17 +29,17 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying...'
-                // Example: Docker deployment
-                sh 'docker build -t myapp:latest .'
-                sh 'docker run -d -p 8080:8080 myapp:latest'
+                // Example: Docker deployment using PowerShell
+                powershell 'docker build -t myapp:latest .'
+                powershell 'docker run -d -p 8080:8080 myapp:latest'
             }
         }
         stage('Release') {
             steps {
                 echo 'Releasing...'
-                // Push Docker image to a registry
-                sh 'docker tag myapp:latest myregistry/myapp:latest'
-                sh 'docker push myregistry/myapp:latest'
+                // Push Docker image to a registry using PowerShell
+                powershell 'docker tag myapp:latest myregistry/myapp:latest'
+                powershell 'docker push myregistry/myapp:latest'
             }
         }
     }
