@@ -9,9 +9,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                dir('path/to/your/project') {  // Update this path if your pom.xml is in a subdirectory
-                    bat 'mvn clean package'
-                }
+                bat 'mvn clean package'
             }
             post {
                 success {
@@ -22,9 +20,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing...'
-                dir('path/to/your/project') {  // Update this path if your pom.xml is in a subdirectory
-                    bat 'mvn test'
-                }
+                bat 'mvn test'
             }
             post {
                 always {
@@ -35,19 +31,15 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying...'
-                dir('path/to/your/project') {  // Update this path if your pom.xml is in a subdirectory
-                    bat 'docker build -t myapp:latest .'
-                    bat 'docker run -d -p 8080:8080 myapp:latest'
-                }
+                bat 'docker build -t myapp:latest .'
+                bat 'docker run -d -p 8080:8080 myapp:latest'
             }
         }
         stage('Release') {
             steps {
                 echo 'Releasing...'
-                dir('path/to/your/project') {  // Update this path if your pom.xml is in a subdirectory
-                    bat 'docker tag myapp:latest myregistry/myapp:latest'
-                    bat 'docker push myregistry/myapp:latest'
-                }
+                bat 'docker tag myapp:latest myregistry/myapp:latest'
+                bat 'docker push myregistry/myapp:latest'
             }
         }
     }
@@ -65,3 +57,4 @@ pipeline {
         }
     }
 }
+
