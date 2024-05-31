@@ -28,26 +28,31 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') {
+          stage('Deploy') {
             steps {
-                echo 'Deploying...'
                 script {
-                    // Pull the latest Docker image
-                    sh 'docker pull myregistry/myapp:latest'
-
-                    // Stop and remove any existing container
-                    sh '''
-                        if [ "$(docker ps -q -f name=myapp)" ]; then
-                            docker stop myapp
-                            docker rm myapp
-                        fi
-                    '''
-
-                    // Run the new container
-                    sh 'docker run -d --name myapp -p 8080:8080 myregistry/myapp:latest'
+                    // Deploy the application using Docker Compose
+                    sh 'docker-compose -f docker-compose.yml up -d --build'
                 }
             }
         }
+    }
+
+    post {
+        always {
+            // Clean up workspace
+            cleanWs()
+        }
+        success {
+            // Notify success (e.g., via email or Slack)
+            echo 'Pipeline succeeded'
+        }
+        failure {
+            // Notify failure (e.g., via email or Slack)
+            echo 'Pipeline failed'
+        }
+    }
+}
         stage('Release') {
             steps {
                 echo 'Releasing...'
