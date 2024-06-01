@@ -35,4 +35,31 @@ pipeline {
                     bat 'dir tests'
 
                     // Install test dependencies
-                    bat 'pip insta
+                    bat 'pip install -r requirements.txt'
+
+                    // Run automated tests and capture output
+                    bat 'python -m unittest discover -s tests -p "*.py" > results.xml'
+
+                    // Archive test results
+                    junit 'results.xml'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up workspace
+            cleanWs()
+        }
+        success {
+            // Notify success (e.g., via email or Slack)
+            echo 'Pipeline succeeded'
+        }
+        failure {
+            // Notify failure (e.g., via email or Slack)
+            echo 'Pipeline failed'
+        }
+    }
+}
+
