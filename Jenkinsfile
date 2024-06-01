@@ -47,7 +47,7 @@ pipeline {
         }
 
 
-            stage('Monitor') {
+           stage('Monitor') {
             steps {
                 script {
                     // Example of triggering a Datadog event
@@ -79,9 +79,9 @@ pipeline {
                     url: "https://api.datadoghq.com/api/v1/events",
                     httpMode: 'POST',
                     customHeaders: [
-                            [name: 'Content-Type', value: 'application/json'],
-                            [name: 'DD-API-KEY', value: env.DATADOG_API_KEY]
-                        ],
+                        [name: 'Content-Type', value: 'application/json'],
+                        [name: 'DD-API-KEY', value: env.DATADOG_API_KEY]
+                    ],
                     requestBody: """{
                         "title": "Deployment failed",
                         "text": "Deployment of ${env.JOB_NAME} failed",
