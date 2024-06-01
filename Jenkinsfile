@@ -21,19 +21,35 @@ pipeline {
             steps {
                 script {
                     // Set up virtual environment for Python tests
-                    sh 'python3 -m venv venv'
-                    sh '. venv/bin/activate'
+                    bat 'python -m venv venv'
+                    bat 'venv\\Scripts\\activate.bat'
 
                     // Install test dependencies
-                    sh 'pip install -r requirements.txt'
+                    bat 'pip install -r requirements.txt'
 
                     // Run automated tests
-                    sh 'python -m unittest discover -s tests'
+                    bat 'python -m unittest discover -s tests'
 
                     // Archive test results
                     junit '**/test-results/*.xml'
                 }
             }
         }
+    }
+
+    post {
+        always {
+            // Clean up workspace
+            cleanWs()
+        }
+        success {
+            // Notify success (e.g., via email or Slack)
+            echo 'Pipeline succeeded'
+        }
+        failure {
+            // Notify failure (e.g., via email or Slack)
+            echo 'Pipeline failed'
+        }
+    }
     }
 }
