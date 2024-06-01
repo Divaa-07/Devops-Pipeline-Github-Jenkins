@@ -1,8 +1,8 @@
 pipeline {
     agent any
 
-     tools {
-        maven 'Maven 3.8.4'  // This should match the name given in the Maven configuration
+    tools {
+        maven 'Maven'  // This should match the name given in the Maven configuration
     }
 
     stages {
@@ -35,31 +35,4 @@ pipeline {
                     bat 'dir tests'
 
                     // Install test dependencies
-                    bat 'pip install -r requirements.txt'
-
-                    // Run automated tests and capture output
-                    bat 'python -m unittest discover -s tests -p "*.py" > results.xml'
-
-                    // Archive test results
-                    junit 'results.xml'
-                }
-            }
-        }
-    }
-
-    post {
-        always {
-            // Clean up workspace
-            cleanWs()
-        }
-        success {
-            // Notify success (e.g., via email or Slack)
-            echo 'Pipeline succeeded'
-        }
-        failure {
-            // Notify failure (e.g., via email or Slack)
-            echo 'Pipeline failed'
-        }
-    }
-}
-
+                    bat 'pip insta
