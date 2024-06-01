@@ -17,12 +17,18 @@ pipeline {
                 }
             }
         }
-        stage('Test') {
+    stage('Test') {
             steps {
                 script {
                     // Set up virtual environment for Python tests
                     bat 'python -m venv venv'
                     bat 'venv\\Scripts\\activate.bat'
+
+                    // Ensure __init__.py exists in the tests directory
+                    bat 'echo.> tests\\__init__.py'
+
+                    // Debug: List directory contents to verify files
+                    bat 'dir tests'
 
                     // Install test dependencies
                     bat 'pip install -r requirements.txt'
@@ -35,8 +41,8 @@ pipeline {
                 }
             }
         }
-    
     }
+
     post {
         always {
             // Clean up workspace
@@ -50,6 +56,5 @@ pipeline {
             // Notify failure (e.g., via email or Slack)
             echo 'Pipeline failed'
         }
-    
-    }   
+    }
 }
