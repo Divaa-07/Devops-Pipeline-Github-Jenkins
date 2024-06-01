@@ -21,7 +21,7 @@ pipeline {
             }
         }
 
-        stage('Test') {
+         stage('Test') {
             steps {
                 script {
                     // Set up virtual environment for Python tests
@@ -49,16 +49,28 @@ pipeline {
 
     post {
         always {
-            // Clean up workspace
-            cleanWs()
+            script {
+                // Clean up workspace
+                cleanWs()
+            }
         }
         success {
-            // Notify success (e.g., via email or Slack)
-            echo 'Pipeline succeeded'
+            script {
+                // Notify success (e.g., via email or Slack)
+                echo 'Pipeline succeeded'
+            }
+        }
+        unstable {
+            script {
+                // Notify unstable build
+                echo 'Pipeline finished with some issues'
+            }
         }
         failure {
-            // Notify failure (e.g., via email or Slack)
-            echo 'Pipeline failed'
+            script {
+                // Notify failure (e.g., via email or Slack)
+                echo 'Pipeline failed'
+            }
         }
     }
 }
