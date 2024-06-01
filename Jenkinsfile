@@ -17,12 +17,15 @@ pipeline {
                 }
             }
         }
-    stage('Test') {
+     stage('Test') {
             steps {
                 script {
                     // Set up virtual environment for Python tests
                     bat 'python -m venv venv'
                     bat 'venv\\Scripts\\activate.bat'
+
+                    // Ensure tests directory exists
+                    bat 'mkdir tests'
 
                     // Ensure __init__.py exists in the tests directory
                     bat 'echo.> tests\\__init__.py'
