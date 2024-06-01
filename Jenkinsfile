@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        DATADOG_API_KEY = credentials('DATADOG_API_KEY')
+    }
+
     tools {
         maven 'Maven'  // This should match the name given in the Maven configuration
     }
