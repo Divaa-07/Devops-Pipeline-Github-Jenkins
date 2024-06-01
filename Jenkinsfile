@@ -11,10 +11,8 @@ pipeline {
                     // Debug: List directory contents to verify files
                     bat 'dir'
 
-                    // Build the project (e.g., using Maven, Gradle, npm, etc.)
-                    // Here we assume a simple npm build
-                    bat 'npm install'
-                    bat 'npm run build'
+                    // Build the Java project using Maven
+                    bat 'mvn clean install'
                 }
             }
         }
@@ -35,8 +33,8 @@ pipeline {
                     // Install test dependencies
                     bat 'pip install -r requirements.txt'
 
-                    // Run automated tests and generate JUnit XML report
-                    bat 'python -m unittest discover -s tests -p "*.py" --buffer --output results.xml'
+                    // Run automated tests and capture output
+                    bat 'python -m unittest discover -s tests -p "*.py" > results.xml'
 
                     // Archive test results
                     junit 'results.xml'
@@ -60,3 +58,4 @@ pipeline {
         }
     }
 }
+
