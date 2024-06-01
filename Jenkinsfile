@@ -1,4 +1,25 @@
-stage('Test') {
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    // Checkout code from Git repository
+                    checkout scm
+
+                    // Debug: List directory contents to verify files
+                    bat 'dir'
+
+                    // Build the project (e.g., using Maven, Gradle, npm, etc.)
+                    // Here we assume a simple npm build
+                    bat 'npm install'
+                    bat 'npm run build'
+                }
+            }
+        }
+
+        stage('Test') {
             steps {
                 script {
                     // Set up virtual environment for Python tests
@@ -38,3 +59,4 @@ stage('Test') {
             echo 'Pipeline failed'
         }
     }
+}
