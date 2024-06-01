@@ -52,7 +52,7 @@ pipeline {
                 script {
                     // Docker login (if using private registry)
                     withCredentials([usernamePassword(credentialsId: env.DOCKER_REGISTRY_CREDENTIALS_ID, passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                        bat 'docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%'
+                        bat 'docker login -u diva981203 -p Divyanga146007#'
                     }
 
                     // Build Docker image
