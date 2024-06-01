@@ -47,7 +47,7 @@ pipeline {
         }
 
 
-          stage('Docker Build and Deploy') {
+           stage('Docker Build and Deploy') {
             steps {
                 script {
                     // Docker login (if using private registry)
