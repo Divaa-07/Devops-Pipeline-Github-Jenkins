@@ -51,5 +51,5 @@ pipeline {
             echo 'Pipeline failed'
         }
     }
-    
+    }   
 }
