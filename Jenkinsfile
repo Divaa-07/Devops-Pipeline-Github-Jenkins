@@ -36,7 +36,7 @@ pipeline {
             }
         }
     
-
+    }
     post {
         always {
             // Clean up workspace
@@ -50,6 +50,6 @@ pipeline {
             // Notify failure (e.g., via email or Slack)
             echo 'Pipeline failed'
         }
-    }
+    
     }   
 }
