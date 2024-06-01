@@ -47,11 +47,16 @@ pipeline {
         }
 
 
-          stage('Deploy') {
+          stage('Docker Build and Deploy') {
             steps {
                 script {
-                    // Pull the latest image (if applicable)
-                    bat 'docker-compose pull'
+                    // Docker login (if using private registry)
+                    withCredentials([usernamePassword(credentialsId: env.DOCKER_REGISTRY_CREDENTIALS_ID, passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                        bat 'docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%'
+                    }
+
+                    // Build Docker image
+                    bat 'docker build -t myapp:latest .'
 
                     // Deploy the application using Docker Compose
                     bat 'docker-compose up -d --build'
