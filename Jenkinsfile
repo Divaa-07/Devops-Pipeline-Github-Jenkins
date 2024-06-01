@@ -1,8 +1,8 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven 3.9.6'  // This should match the name given in the Maven configuration
+     tools {
+        maven 'Maven 3.8.4'  // This should match the name given in the Maven configuration
     }
 
     stages {
