@@ -47,19 +47,22 @@ pipeline {
         }
 
 
-           stage('Docker Build and Deploy') {
+           stage('Monitor') {
             steps {
                 script {
-                    // Docker login (if using private registry)
-                    withCredentials([usernamePassword(credentialsId: env.DOCKER_REGISTRY_CREDENTIALS_ID, passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                        bat 'docker login -u diva981203 -p Divyanga146007#'
-                    }
-
-                    // Build Docker image
-                    bat 'docker build -t myapp:latest .'
-
-                    // Deploy the application using Docker Compose
-                    bat 'docker-compose up -d --build'
+                    // Example of triggering a Datadog event
+                    def response = httpRequest(
+                        url: "https://api.datadoghq.com/api/v1/events",
+                        httpMode: 'POST',
+                        customHeaders: [[name: 'Content-Type', value: 'application/json'], [name: 'DD-API-KEY', value: env.DATADOG_API_KEY]],
+                        requestBody: """{
+                            "title": "Deployment completed",
+                            "text": "Deployment of ${env.JOB_NAME} completed successfully",
+                            "priority": "normal",
+                            "tags": ["env:production", "app:${env.JOB_NAME}"]
+                        }"""
+                    )
+                    echo "Datadog event response: ${response}"
                 }
             }
         }
