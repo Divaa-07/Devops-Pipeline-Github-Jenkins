@@ -47,14 +47,17 @@ pipeline {
         }
 
 
-           stage('Monitor') {
+            stage('Monitor') {
             steps {
                 script {
                     // Example of triggering a Datadog event
                     def response = httpRequest(
                         url: "https://api.datadoghq.com/api/v1/events",
                         httpMode: 'POST',
-                        customHeaders: [[name: 'Content-Type', value: 'application/json'], [name: 'DD-API-KEY', value: env.DATADOG_API_KEY]],
+                        customHeaders: [
+                            [name: 'Content-Type', value: 'application/json'],
+                            [name: 'DD-API-KEY', value: env.DATADOG_API_KEY]
+                        ],
                         requestBody: """{
                             "title": "Deployment completed",
                             "text": "Deployment of ${env.JOB_NAME} completed successfully",
@@ -69,28 +72,25 @@ pipeline {
     }
 
     post {
-        always {
-            script {
-                // Clean up workspace
-                cleanWs()
-            }
-        }
-        success {
-            script {
-                // Notify success (e.g., via email or Slack)
-                echo 'Pipeline succeeded'
-            }
-        }
-        unstable {
-            script {
-                // Notify unstable build
-                echo 'Pipeline finished with some issues'
-            }
-        }
         failure {
             script {
-                // Notify failure (e.g., via email or Slack)
-                echo 'Pipeline failed'
+                // Example of triggering a Datadog event on failure
+                def response = httpRequest(
+                    url: "https://api.datadoghq.com/api/v1/events",
+                    httpMode: 'POST',
+                    customHeaders: [
+                            [name: 'Content-Type', value: 'application/json'],
+                            [name: 'DD-API-KEY', value: env.DATADOG_API_KEY]
+                        ],
+                    requestBody: """{
+                        "title": "Deployment failed",
+                        "text": "Deployment of ${env.JOB_NAME} failed",
+                        "priority": "high",
+                        "alert_type": "error",
+                        "tags": ["env:production", "app:${env.JOB_NAME}"]
+                    }"""
+                )
+                echo "Datadog event response: ${response}"
             }
         }
     }
