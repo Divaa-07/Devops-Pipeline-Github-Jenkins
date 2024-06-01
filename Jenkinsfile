@@ -1,34 +1,12 @@
-pipeline {
-    agent any
-
-    tools {
-        maven 'Maven' // This should match the name given in the Global Tool Configuration
-    }
-
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building...'
-                bat 'mvn clean package'
-            }
-            post {
-                success {
-                    archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-                }
-            }
-        }
-     stage('Test') {
+stage('Test') {
             steps {
                 script {
                     // Set up virtual environment for Python tests
                     bat 'python -m venv venv'
                     bat 'venv\\Scripts\\activate.bat'
 
-                    // Ensure tests directory exists
-                    bat 'mkdir tests'
-
                     // Ensure __init__.py exists in the tests directory
-                    bat 'echo.> tests\\__init__.py'
+                    bat 'if not exist tests\\__init__.py ( echo.> tests\\__init__.py )'
 
                     // Debug: List directory contents to verify files
                     bat 'dir tests'
@@ -36,11 +14,11 @@ pipeline {
                     // Install test dependencies
                     bat 'pip install -r requirements.txt'
 
-                    // Run automated tests
-                    bat 'python -m unittest discover -s tests'
+                    // Run automated tests and generate JUnit XML report
+                    bat 'python -m unittest discover -s tests -p "*.py" --buffer --output results.xml'
 
                     // Archive test results
-                    junit '**/test-results/*.xml'
+                    junit 'results.xml'
                 }
             }
         }
@@ -60,4 +38,3 @@ pipeline {
             echo 'Pipeline failed'
         }
     }
-}
