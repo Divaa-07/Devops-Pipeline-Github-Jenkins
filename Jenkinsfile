@@ -45,6 +45,19 @@ pipeline {
                 }
             }
         }
+
+
+          stage('Deploy') {
+            steps {
+                script {
+                    // Pull the latest image (if applicable)
+                    bat 'docker-compose pull'
+
+                    // Deploy the application using Docker Compose
+                    bat 'docker-compose up -d --build'
+                }
+            }
+        }
     }
 
     post {
